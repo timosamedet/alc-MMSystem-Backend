@@ -17,7 +17,7 @@ export class CertificatesService {
   }
 
   update(id: number, updateCertificateDto: UpdateCertificateDto) {
-    return updateCertificateDto;
+    return `This action updates a #${id} ${updateCertificateDto}certificate`;
   }
 
   remove(id: number) {

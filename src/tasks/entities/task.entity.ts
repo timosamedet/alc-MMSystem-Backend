@@ -33,8 +33,8 @@ export class Task {
   @Column({ type: 'enum', enum: TaskStatus, default: TaskStatus.UNASSIGNED, })
   status: TaskStatus;
 
-  @ManyToOne(() => Programme, (programme) => programme.tasks, { cascade: true, })
-  programme: Programme;
+  //@ManyToOne(() => Programme, (programme) => programme.tasks, { cascade: true, })
+  //programme: Programme;
 
   @OneToOne(() => User)
   @JoinColumn()
@@ -70,5 +70,4 @@ export class Task {
   @Column()
   @DeleteDateColumn()
   deleted_at: Date;
-
 }
