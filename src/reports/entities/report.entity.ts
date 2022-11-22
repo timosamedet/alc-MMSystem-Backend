@@ -44,7 +44,7 @@ export class Report {
   @JoinColumn()
   task: Task;
 
-  @ManyToOne(() => Programme, (programme) => programme.reports, { nullable: true, })
+  @ManyToOne(() => Programme, { nullable: true, })
   programme: Programme;
 
   @OneToOne(() => User)
