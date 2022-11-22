@@ -79,7 +79,7 @@ export class User extends BaseEntity {
   @Column({ nullable: true })
   dob: Date;
 
-  @Column({ enum: UserRoles, default: UserRoles.Mentor })
+  @Column({ type: 'enum', enum: UserRoles, default: UserRoles.Mentor })
   role: UserRoles;
 
   @Column({ type: 'varchar' })
