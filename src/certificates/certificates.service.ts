@@ -1,26 +1,37 @@
 import { Injectable } from '@nestjs/common';
+import { Repository } from 'typeorm';
 import { CreateCertificateDto } from './dto/create-certificate.dto';
 import { UpdateCertificateDto } from './dto/update-certificate.dto';
+import { Certificate } from './entities/certificate.entity';
 
 @Injectable()
-export class CertificatesService {
+export class CertificateService {
+  constructor(
+    @InjectRepository(Certificate) private certificateRepository: Repository<Certificate>,
+  ) {}
   create(createCertificateDto: CreateCertificateDto) {
-    return createCertificateDto;
+    const newCertificate = this.certificateRepository.create({
+      ...createCertificateDto,
+      created_at: new Date(),
+    });
+    return this.certificateRepository.save(newCertificate);
   }
 
   findAll() {
-    return `This action returns all certificates`;
+    const certificates = this.certificateRepository.find();
+    return certificates;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} certificate`;
+  findOne(id: {}) {
+    const certificate = this.certificateRepository.findOne({ where: id });
+    return certificate;
   }
 
   update(id: number, updateCertificateDto: UpdateCertificateDto) {
-    return `This action updates a #${id} ${updateCertificateDto}certificate`;
+    return this.certificateRepository.update({ id }, { ...updateCertificateDto });
   }
 
   remove(id: number) {
-    return `This action removes a #${id} certificate`;
+    return this.certificateRepository.delete(id);
   }
 }
