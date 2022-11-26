@@ -5,7 +5,7 @@ import { UpdateCertificateDto } from './dto/update-certificate.dto';
 import { Certificate } from './entities/certificate.entity';
 
 @Injectable()
-export class CertificateService {
+export class CertificatesService {
   constructor(
     @InjectRepository(Certificate) private certificateRepository: Repository<Certificate>,
   ) {}
