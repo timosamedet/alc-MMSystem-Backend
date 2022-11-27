@@ -11,7 +11,7 @@ import { User } from '../../users/entities/user.entity';
 
 
 export enum CertificateStatus {
-  PENDING_APPROVAL = 'pending_approval',
+  PENDING_APPROVAL = 'pending-approval',
   APPROVED = 'approved',
 }
 
@@ -24,7 +24,7 @@ export class Certificate {
   code: string;
 
   @Column({ type: 'datetime', nullable: true, })
-  expires_at: Date;
+  expiresAt: Date;
 
   @Column({ type: 'enum', enum: CertificateStatus, default: CertificateStatus.PENDING_APPROVAL, })
   status: CertificateStatus;
@@ -33,25 +33,25 @@ export class Certificate {
   programme: Programme;
 
   @ManyToOne(() => User)
-  issued_to: User;
+  issuedTo: User;
 
   @ManyToOne(() => User)
-  created_by: User;
+  createdBy: User;
 
   @Column()
   @CreateDateColumn()
-  created_at: Date;
+  createdAt: Date;
 
   @ManyToOne(() => User, { nullable: true })
-  approved_by: User;
+  approvedBy: User;
 
   @Column({ type: 'datetime', nullable: true, })
-  approved_at: Date;
+  approvedAt: Date;
 
   @ManyToOne(() => User, { nullable: true })
-  deleted_by: User;
+  deletedBy: User;
 
   @Column()
   @DeleteDateColumn()
-  deleted_at: Date;
+  deletedAt: Date;
 }
