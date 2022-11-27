@@ -25,6 +25,7 @@ import { CertificatesModule } from './certificates/certificates.module';
       database: process.env.DB_DATABASE_NAME,
       autoLoadEntities: true,
       synchronize: true,
+      dropSchema: true,
       logging: false,
       entities: ['dist/**/*entity.js'],
       migrations: ['dist/migration/*.js'],
