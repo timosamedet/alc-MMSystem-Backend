@@ -9,7 +9,6 @@ import {
 import { Programme } from '../../programmes/entities/programme.entity';
 import { User } from '../../users/entities/user.entity';
 
-
 export enum CertificateStatus {
   PENDING_APPROVAL = 'pending-approval',
   APPROVED = 'approved',
@@ -23,10 +22,14 @@ export class Certificate {
   @Column({ type: 'varchar' })
   code: string;
 
-  @Column({ type: 'datetime', nullable: true, })
+  @Column({ type: 'datetime', nullable: true })
   expiresAt: Date;
 
-  @Column({ type: 'enum', enum: CertificateStatus, default: CertificateStatus.PENDING_APPROVAL, })
+  @Column({
+    type: 'enum',
+    enum: CertificateStatus,
+    default: CertificateStatus.PENDING_APPROVAL,
+  })
   status: CertificateStatus;
 
   @ManyToOne(() => Programme)
@@ -45,7 +48,7 @@ export class Certificate {
   @ManyToOne(() => User, { nullable: true })
   approvedBy: User;
 
-  @Column({ type: 'datetime', nullable: true, })
+  @Column({ type: 'datetime', nullable: true })
   approvedAt: Date;
 
   @ManyToOne(() => User, { nullable: true })

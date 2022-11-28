@@ -6,6 +6,7 @@ import {
   Matches,
   IsEmail,
   IsNotEmpty,
+  IsIn,
 } from 'class-validator';
 import { UserRoles } from '../../users/entities/user.entity';
 
@@ -19,8 +20,9 @@ export class SignupCredentialsDto {
   @IsNotEmpty()
   name: string;
 
-  @ApiProperty({ nullable: false, enum: ['mentor', 'mentor-manger', 'admin'] })
+  @ApiProperty({ nullable: false, enum: ['mentor', 'mentor-manager', 'admin'] })
   @IsNotEmpty()
+  @IsIn(['mentor', 'mentor-manager', 'admin'])
   role: UserRoles;
 
   @ApiProperty({

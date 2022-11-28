@@ -3,45 +3,57 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
-  Delete,
+  Put,
+  Query,
+  UseGuards,
+  // Delete,
 } from '@nestjs/common';
 import { ProgrammesService } from './programmes.service';
 import { CreateProgrammeDto } from './dto/create-programme.dto';
 import { UpdateProgrammeDto } from './dto/update-programme.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { GetUser } from 'src/auth/decorator/get-user.decorator';
+import { User } from 'src/users/entities/user.entity';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
-@ApiTags('Programmes')
-@Controller('programmes')
+@ApiTags('Programs')
+@Controller('programs')
 export class ProgrammesController {
   constructor(private readonly programmesService: ProgrammesService) {}
 
   @Post()
-  create(@Body() createProgrammeDto: CreateProgrammeDto) {
-    return this.programmesService.create(createProgrammeDto);
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  async create(
+    @Body() createProgrammeDto: CreateProgrammeDto,
+    @GetUser() user: User,
+  ) {
+    return await this.programmesService.create(createProgrammeDto, user);
   }
 
   @Get()
-  findAll() {
-    return this.programmesService.findAll();
+  async findAll(@Query('page') page = 1, @Query('chunk') chunk = 10) {
+    return await this.programmesService.findAll(page, chunk);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.programmesService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    return await this.programmesService.findOne(+id);
   }
 
-  @Patch(':id')
-  update(
+  @Put(':id')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  async update(
     @Param('id') id: string,
     @Body() updateProgrammeDto: UpdateProgrammeDto,
   ) {
-    return this.programmesService.update(+id, updateProgrammeDto);
+    return await this.programmesService.update(+id, updateProgrammeDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.programmesService.remove(+id);
-  }
+  // @Delete(':id')
+  // remove(@Param('id') id: string) {
+  //   return this.programmesService.remove(+id);
+  // }
 }

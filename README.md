@@ -27,6 +27,22 @@ There are three groups of user categories namely `Admin`, `Mentor Manager(MM)`, 
 for this group
 users is listed as follows:
 
+Team 1 to 4:
+Users (Update profile, change password, reset password)
+Programmes (Create, Read, Update, Delete)
+Programme Applications (Create, Read, Update, Delete)
+
+Team 5 to 7:
+Tasks (Create, Read, Update, Delete)
+Reports (Create, Read, Update, Delete)
+CERTIFICATE (Create, Read, Update, Delete)
+
+Team 8 to 10:
+Chat (Create, Read, Update, Delete)
+DISCUSSION (Create, Read, Update, Delete)
+NOTIFICATIONS (Create, Read, Update, Delete)
+
+
 ## Admin Category:
 
 - Login/Logout
@@ -123,8 +139,7 @@ To use and contribute to the project, do the following:
 1. Install and create a MySQL database
 2. Create a .env file in the root directory
 3. Set the environment variables with your local database credentials (see .env.example for reference)
-4. Run `yarn migrate` to create the tables in your database
-5. Run `yarn seed` to seed the database with dummy data
+
 
 ## Design
 
