@@ -1,26 +1,79 @@
-import { Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { CreateProgrammeDto } from './dto/create-programme.dto';
 import { UpdateProgrammeDto } from './dto/update-programme.dto';
+import { Programme } from './entities/programme.entity';
+import { NAME_ALREADY_EXISTS } from 'src/utils/constants';
+import { User } from 'src/users/entities/user.entity';
 
 @Injectable()
 export class ProgrammesService {
-  create(createProgrammeDto: CreateProgrammeDto) {
-    return createProgrammeDto;
+  constructor(
+    @InjectRepository(Programme)
+    private programmeRepository: Repository<Programme>,
+  ) {}
+
+  async create(createProgrammeDto: CreateProgrammeDto, createdBy: User) {
+    try {
+      const program = this.programmeRepository.create({
+        ...createProgrammeDto,
+        criteria: JSON.stringify(createProgrammeDto.criteria ?? {}, null, 2),
+        created_by: createdBy,
+      });
+      return await this.programmeRepository.save(program);
+    } catch (e) {
+      throw e.code === 'ER_DUP_ENTRY'
+        ? new ConflictException(NAME_ALREADY_EXISTS)
+        : e;
+    }
   }
 
-  findAll() {
-    return `This action returns all programmes`;
+  /**
+   * This action returns all programmes
+   * @highman95
+   */
+  async findAll(page = 1, chunk = 10): Promise<Programme[]> {
+    const limit = !chunk || chunk >= 100 ? 10 : chunk;
+    const offset = ((!page || page <= 0 ? 1 : page) - 1) * limit;
+
+    return await this.programmeRepository.find({
+      skip: offset,
+      take: limit,
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} programme`;
+  /**
+   * This action returns a #${id} programme
+   * @highman95
+   */
+  async findOne(param = {}): Promise<Programme> {
+    return await this.programmeRepository.findOne({ where: param });
   }
 
-  update(id: number, updateProgrammeDto: UpdateProgrammeDto) {
-    return `This action updates a #${id}  ${updateProgrammeDto}programme`;
+  /**
+   * This action updates a #${id} ${updateProgrammeDto}programme;
+   */
+  async update(
+    id: number,
+    updateProgrammeDto: UpdateProgrammeDto,
+  ): Promise<Programme> {
+    const programme = await this.programmeRepository.findOneBy({ id });
+    if (!programme) {
+      throw new NotFoundException('Programme not found');
+    }
+
+    const { name, description } = updateProgrammeDto;
+    programme.name = name;
+    programme.description = description;
+    return await this.programmeRepository.save(programme);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} programme`;
-  }
+  // remove(id: number) {
+  //   return `This action removes a #${id} programme`;
+  // }
 }

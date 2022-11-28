@@ -19,7 +19,7 @@ MMM-CLOUD PROJECT TEAM: ENTITIES & SCHEMAS FOR OUR BACKEND
 2.     user Details
 ID
 -        user_id
--    manger_id
+-    manager_id
 -	previous held role: [String]
 - 	previous program: [String]
 -	Programme of interest: programe_id
@@ -30,6 +30,7 @@ ID
 - 	Previous roles(List)
 - status: boolean
 -approved
+
 3.     PROGRAMME
 -        id
 -        name: string
@@ -48,18 +49,18 @@ Relationship: One to many with Task.
 Relationship: Many to Many with Manager
 Relationship: One to many with Report
 
- 4. ProgramsMentor
+5. ProgramsMentor
 Program_id
 User_id
 
-4.  Programme APPLICATION
+6.  Programme APPLICATION
 Programe_id
 User_id
 answers(JSON)
 Status: (Pending, Approved, Declied)
 approvedDeclied_By
 
-2.     TASK
+7.     TASK
 -        id
 -        title
 -        description
@@ -73,14 +74,14 @@ Relationship: One to many with Report
 
 
 
-4.     TECH_STACK
+8.     TECH_STACK
 -        id
 -        name
 
-4.     Job Roles
+9.     Job Roles
 -        id
 -        name
-9.     REPORT
+10.     REPORT
 -        id
 Type (programe,type)
 -        report_title
@@ -94,13 +95,11 @@ program_id
 
 
 
-5.     CERTIFICATE
+11.     CERTIFICATE
 -        id
 User_id
 Programe_id
-Series Id
 Issue Date
-Expiration Date
 -        date_created
 -        created_by
 -	approvedBy
@@ -111,9 +110,9 @@ Expiration Date
 
 
 
-10.  CHAT
-11.  MESSAGE
-13.  CHAT BOX
+12.  CHAT
+13.  MESSAGE
+14.  CHAT BOX
 15.  DISCUSSION FORUM
 16.  NOTIFICATIONS
 

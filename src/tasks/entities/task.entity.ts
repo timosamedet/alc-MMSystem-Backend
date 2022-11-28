@@ -1,20 +1,18 @@
+import { Programme } from 'src/programmes/entities/programme.entity';
+import { User } from 'src/users/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
-  JoinColumn,
   ManyToOne,
-  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { User } from '../../users/entities/user.entity';
-import { Programme } from '../../programmes/entities/programme.entity';
 
 export enum TaskStatus {
   COMPLETED = 'completed',
-  IN_PROGRESS = 'in_progress',
+  IN_PROGRESS = 'in-progress',
   PENDING = 'pending',
   UNASSIGNED = 'unassigned',
 }
@@ -33,36 +31,36 @@ export class Task {
   @Column({ type: 'enum', enum: TaskStatus, default: TaskStatus.UNASSIGNED })
   status: TaskStatus;
 
-  @ManyToOne(() => Programme, { cascade: true })
+  @ManyToOne(() => Programme)
   programme: Programme;
 
   @ManyToOne(() => User)
-  created_by: User;
+  createdBy: User;
 
   @Column()
   @CreateDateColumn()
-  created_at: Date;
+  createdAt: Date;
 
   @ManyToOne(() => User, { nullable: true })
-  assigned_to: User;
+  assignedTo: User;
 
   @ManyToOne(() => User, { nullable: true })
-  assigned_by: User;
+  assignedBy: User;
 
   @Column({ type: 'datetime', nullable: true })
-  assigned_at: Date;
+  assignedAt: Date;
 
-  @ManyToOne(() => User)
-  last_updated_by: User;
+  @ManyToOne(() => User, { nullable: true })
+  lastUpdatedBy: User;
 
   @Column()
   @UpdateDateColumn()
-  last_updated_at: Date;
+  lastUpdatedAt: Date;
 
   @ManyToOne(() => User, { nullable: true })
-  deleted_by: User;
+  deletedBy: User;
 
   @Column()
   @DeleteDateColumn()
-  deleted_at: Date;
+  deletedAt: Date;
 }

@@ -28,17 +28,17 @@ export class ReportsController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.reportsService.findOne(+id);
+  findOne(@Param('id') id: number) {
+    return this.reportsService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateReportDto: UpdateReportDto) {
-    return this.reportsService.update(+id, updateReportDto);
+  update(@Param('id') id: number, @Body() updateReportDto: UpdateReportDto) {
+    return this.reportsService.update(id, updateReportDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.reportsService.remove(+id);
+  remove(@Param('id') id: number) {
+    return this.reportsService.remove(id);
   }
 }
