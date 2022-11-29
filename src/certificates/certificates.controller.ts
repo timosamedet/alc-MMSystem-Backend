@@ -12,6 +12,7 @@ import { CertificateStatus } from './entities/certificate.entity';
 import { CreateCertificateDto } from './dto/create-certificate.dto';
 import { ApproveCertificateDto } from './dto/approve-certificate.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { GetUser } from 'src/auth/decorator/get-user.decorator';
 
 @ApiTags('Certificates')
 @Controller('certificates')
@@ -65,6 +66,7 @@ export class CertificatesController {
   @Get('programmes/:id')
   async getCertificatesByProgramme(@Param('id') id: number) {
     return await this.certificatesService.findCertificatesByProgramme(+id);
+    // iLuv2code
   }
 
   @Get('programmes/:id/status/:status')
@@ -95,6 +97,16 @@ export class CertificatesController {
   }
 
   @Get(':id')
+<<<<<<< HEAD
+  findOne(@Param('id') id: number) {
+    return this.certificatesService.findOne(+id);
+  }
+
+  @Patch(':id')
+  update(
+    @Param('id') id: number,
+    @Body() updateCertificateDto: UpdateCertificateDto,
+=======
   async getOneCertificateById(@Param('id') id: number) {
     return await this.certificatesService.findOneById(+id);
   }
@@ -103,10 +115,16 @@ export class CertificatesController {
   async approveCertificate(
     @Param('id') id: number,
     @Body() approveCertificateDto: ApproveCertificateDto,
+>>>>>>> d4ce28c6cef35e0d398d3c20bfcf8142073820d5
   ) {
     await this.certificatesService.approve(+id, approveCertificateDto);
   }
 
+<<<<<<< HEAD
+  @Delete(':id')
+  remove(@Param('id') id: number) {
+    return this.certificatesService.remove(+id);
+=======
   @Delete('soft/:id')
   async softDeleteCertificate(@Param('id') id: number) {
     await this.certificatesService.softDeleteCertificate(+id);
@@ -120,5 +138,6 @@ export class CertificatesController {
   @Delete('hard/:id')
   async hardDeleteCertificate(@Param('id') id: number) {
     await this.certificatesService.hardDeleteCertificate(+id);
+>>>>>>> d4ce28c6cef35e0d398d3c20bfcf8142073820d5
   }
 }
