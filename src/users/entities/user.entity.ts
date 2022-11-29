@@ -137,6 +137,10 @@ export class User extends BaseEntity {
   async hashPassword() {
     this.salt = await bcrypt.genSalt();
     this.password = await bcrypt.hash(this.password, this.salt);
+
+    if (!this.reset_code) {
+      this.reset_code = bcrypt.hashSync(crypto.randomUUID(), 8);
+    }
   }
 
   @BeforeUpdate()

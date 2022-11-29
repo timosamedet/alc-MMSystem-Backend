@@ -23,7 +23,7 @@ export class ReportsService {
     return reports;
   }
 
-  findOne(id: {}) {
+  findOne(id = {}) {
     const task = this.reportRepository.findOne({ where: id });
     return task;
   }
@@ -31,6 +31,7 @@ export class ReportsService {
   update(id: number, updateReportDto: UpdateReportDto) {
     return this.reportRepository.update({ id }, { ...updateReportDto });
   }
+
   remove(id: number) {
     return this.reportRepository.delete(id);
   }

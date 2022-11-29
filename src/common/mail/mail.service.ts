@@ -18,7 +18,6 @@ export class MailService {
       },
     });
   }
-
   send(data: IMailGetData) {
     return new Promise((res, rej) => {
       this.transporter.sendMail(

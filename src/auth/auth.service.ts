@@ -60,6 +60,7 @@ export class AuthService {
 
   async register(
     signupCredentialsDto: SignupCredentialsDto,
+    hostname: string,
   ): Promise<{ accessToken: string; user: User }> {
     if (signupCredentialsDto.role === UserRoles.Admin) {
       if (!signupCredentialsDto.email.endsWith('@andela.com')) {
@@ -69,6 +70,24 @@ export class AuthService {
 
     const resp = await this.userService.create(signupCredentialsDto);
     const accessToken = this.generateJWT(resp);
+
+    const verificationLink = `https://${hostname}?email=${resp.email}&token=${resp.reset_code}`;
+    await this.mailService.send({
+      to: resp.email,
+      subject: 'Welcome! ALC Mentor...',
+      html: `
+          <h5>Hi ${resp.name}!</h5>
+          <p>We are glad that you've decided to join this awesome community and have taken the first step forward.</p>
+          <p>Kindly follow the link below to verify your e-mail address:</p>
+          <p><a href="${verificationLink}" target="_blank">${verificationLink}</a></p>
+          <p>OR</>
+          <p>Copy and Paste the text below to your browser's address bar and press Enter</p>
+          <p>${verificationLink}</p>
+          <p></p>
+          <p>Regards,</p>
+          <p>Community Lead</p>
+      `,
+    });
 
     // remove PII
     delete resp.password;
@@ -86,12 +105,17 @@ export class AuthService {
       throw new BadRequestException('E-mail is required');
     }
 
-    // TODO: confirm verification token
-    console.log(`verification-token --> ${verificationToken}`);
+    if (!verificationToken?.trim()) {
+      throw new BadRequestException('Verification token is required');
+    }
 
     const user0 = await this.userService.findOne({ email });
     if (!user0) {
       throw new NotFoundException('No record found');
+    }
+
+    if (user0.reset_code !== verificationToken) {
+      throw new BadRequestException('Verification token is invalid');
     }
 
     if (user0.email_verified) {

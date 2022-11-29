@@ -1,3 +1,4 @@
+import { Programme } from 'src/programmes/entities/programme.entity';
 import { Task } from 'src/tasks/entities/task.entity';
 import { User } from 'src/users/entities/user.entity';
 import {
@@ -11,7 +12,6 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Programme } from '../../programmes/entities/programme.entity';
 
 export enum ReportType {
   PROGRAMME_REPORT = 'Programme Report',

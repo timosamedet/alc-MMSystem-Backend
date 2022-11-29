@@ -1,4 +1,4 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Between, Repository } from 'typeorm';
 import { AssignTaskDto } from './dto/assign-task.dto';
@@ -28,6 +28,7 @@ export class TasksService {
       createdBy: user,
       programme,
     });
+
     return await this.taskRepository.save(newTask);
   }
 
@@ -117,12 +118,14 @@ export class TasksService {
   async assignTaskToUser(id: number, assignTaskDto: AssignTaskDto, user: User) {
     const task = await this.findOneById(id);
     if (!task) {
-      throw new ConflictException('Task not found');
+      throw new NotFoundException('Task not found');
     }
+
     user = await this.userService.findOne({ id: user.id });
     const assignedTo = await this.userService.findOne({
       id: assignTaskDto.assignedToId,
     });
+
     await this.taskRepository.update(id, {
       assignedAt: new Date(),
       assignedBy: user,
@@ -134,8 +137,9 @@ export class TasksService {
   async updateTask(id: number, updateTaskDto: UpdateTaskDto, user: User) {
     const task = await this.findOneById(id);
     if (!task) {
-      throw new ConflictException('Task not found');
+      throw new NotFoundException('Task not found');
     }
+
     user = await this.userService.findOne({ id: user.id });
     updateTaskDto['lastUpdatedBy'] = user;
     await this.taskRepository.update(id, { ...updateTaskDto });
