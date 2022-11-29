@@ -6,8 +6,8 @@ import {
   HttpStatus,
   Param,
   Post,
-  Put,
   Query,
+  Req,
   UseGuards,
   ValidationPipe,
 } from '@nestjs/common';
@@ -19,6 +19,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from './decorator/get-user.decorator';
 import { User } from '../users/entities/user.entity';
 import { UpdatePasswordDto } from 'src/users/dto/update-password';
+import { Request } from 'express';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -42,8 +43,9 @@ export class AuthController {
   @Post('register')
   async register(
     @Body(ValidationPipe) signUpCredentialsDto: SignupCredentialsDto,
+    @Req() req: Request,
   ) {
-    return await this.authService.register(signUpCredentialsDto);
+    return await this.authService.register(signUpCredentialsDto, req.hostname);
   }
 
   @Get('email/forgot-password/:email')
@@ -59,7 +61,7 @@ export class AuthController {
     return await this.authService.changePassword(resetPassword);
   }
 
-  @Put('verify')
+  @Get('verify')
   async verifyEmail(
     @Query('email') email: string,
     @Query('token') token: string,

@@ -23,6 +23,11 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       throw new UnauthorizedException();
     }
 
+    // remove PII
+    delete user.password;
+    delete user.salt;
+    delete user.reset_code;
+
     return user;
   }
 }

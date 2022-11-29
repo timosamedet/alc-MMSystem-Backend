@@ -3,7 +3,6 @@ import {
   Controller,
   Delete,
   Get,
-  InternalServerErrorException,
   NotFoundException,
   Param,
   ParseIntPipe,
@@ -107,16 +106,22 @@ export class TasksController {
   }
 
   @Delete('soft/:id')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   async softDeleteTask(@Param('id') id: number) {
     await this.tasksService.softDeleteTask(id);
   }
 
   @Patch('soft/:id')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   async restoreSoftDeletedTask(@Param('id') id: number) {
     await this.tasksService.restoreSoftDeletedTask(id);
   }
 
   @Delete('hard/:id')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   async hardDeleteTask(@Param('id') id: number) {
     await this.tasksService.hardDeleteTask(id);
   }
