@@ -76,7 +76,11 @@ export class ReportsService {
       order: { created_at: 'DESC' },
     });
   }
-  findReportByDateCreated() {}
+  async findReportByDateCreated(dateCreated: Date): Promise<Report[]> {
+    return await this.reportRepository.find({
+      where: { created_at: dateCreated },
+    });
+  }
   findReportByCreatorId() {}
   findReportByDateCreationRange() {}
 
