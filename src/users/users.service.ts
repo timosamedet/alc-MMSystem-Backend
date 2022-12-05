@@ -68,7 +68,7 @@ export class UsersService {
         mentors: false,
         userDetails: true,
       },
-      where: { role: UserRoles.MentorManager },
+      where: { role: UserRoles.MentorManger },
       order: { created_at: 'DESC' },
     });
   }
@@ -86,7 +86,7 @@ export class UsersService {
         userDetails: true,
       },
       where: {
-        role: UserRoles.MentorManager,
+        role: UserRoles.MentorManger,
         userDetails: {
           approved: true,
         },
@@ -128,7 +128,7 @@ export class UsersService {
         userDetails: true,
       },
       where: {
-        role: UserRoles.MentorManager,
+        role: UserRoles.MentorManger,
         userDetails: {
           approved: false,
         },

@@ -12,7 +12,10 @@ import { JobRolesModule } from './job-roles/job-roles.module';
 import { TechStacksModule } from './tech-stacks/tech-stacks.module';
 import { ReportsModule } from './reports/reports.module';
 import { CertificatesModule } from './certificates/certificates.module';
-
+import { PostsModule } from './Posts/Posts.module';
+import { CommentModule } from './Comments/Comments.module';
+import * as dotenv from 'dotenv';
+dotenv.config();
 @Module({
   imports: [
     ConfigModule.forRoot(),
@@ -24,7 +27,7 @@ import { CertificatesModule } from './certificates/certificates.module';
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE_NAME,
       autoLoadEntities: true,
-      synchronize: true,
+      synchronize: false,
       logging: false,
       entities: ['dist/**/*entity.js'],
       migrations: ['dist/migration/*.js'],
@@ -38,6 +41,8 @@ import { CertificatesModule } from './certificates/certificates.module';
     TechStacksModule,
     ReportsModule,
     CertificatesModule,
+    CommentModule,
+    PostsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

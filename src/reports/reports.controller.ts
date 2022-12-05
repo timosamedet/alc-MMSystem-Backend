@@ -45,8 +45,12 @@ export class ReportsController {
   @Patch(':id')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
-  update(@Param('id') id: number, @Body() updateReportDto: UpdateReportDto) {
-    return this.reportsService.updateReport(id, updateReportDto);
+  update(
+    @Param('id') id: number,
+    @Body() updateReportDto: UpdateReportDto,
+    @GetUser() user: User,
+  ) {
+    return this.reportsService.updateReport(id, updateReportDto, user);
   }
 
   @Delete(':id')

@@ -1,7 +1,5 @@
 import {
   BaseEntity,
-  BeforeInsert,
-  BeforeUpdate,
   Column,
   CreateDateColumn,
   DeleteDateColumn,
@@ -13,16 +11,16 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { PostEntity } from 'src/Posts/Posts.entity';
+import { CommentEntity } from 'src/Comments/Comment.entity';
 import * as bcrypt from 'bcrypt';
 import { UserDetail } from '../../user-details/entities/user-detail.entity';
 import { Exclude } from 'class-transformer';
-import { Gender } from '../../utils/enums';
-import { Task } from '../../tasks/entities/task.entity';
 
 export enum UserRoles {
   Admin = 'admin',
   Mentor = 'mentor',
-  MentorManager = 'mentor-manager',
+  MentorManger = 'mentor-manger',
 }
 
 @Entity('users')
@@ -78,8 +76,8 @@ export class User extends BaseEntity {
   @Column({ type: 'varchar', nullable: true })
   headline: string;
 
-  @Column({ type: 'enum', enum: Gender, default: Gender.FEMALE })
-  gender: Gender;
+  @Column({ nullable: true })
+  gender: string;
 
   @Column({ nullable: true })
   dob: Date;
@@ -109,17 +107,14 @@ export class User extends BaseEntity {
     cascade: true,
     nullable: true,
   })
+  @JoinColumn()
   manager: User;
 
   @OneToMany(() => User, (user) => user.manager, {
     nullable: true,
   })
+  @JoinColumn()
   mentors: User[];
-
-  @OneToMany(() => Task, (task) => task.assignedTo, {
-    nullable: true,
-  })
-  tasks: Task[];
 
   @Column()
   @CreateDateColumn()
@@ -132,30 +127,14 @@ export class User extends BaseEntity {
   @Column()
   @DeleteDateColumn()
   deleted_at: Date;
-
-  @BeforeInsert()
-  async hashPassword() {
-    this.salt = await bcrypt.genSalt();
-    this.password = await bcrypt.hash(this.password, this.salt);
-
-    if (!this.reset_code) {
-      this.reset_code = bcrypt.hashSync(crypto.randomUUID(), 8);
-    }
-  }
-
-  @BeforeUpdate()
-  async hashPasswordBeforeUpdate() {
-    if (
-      !this.password.startsWith('$2a$') &&
-      !this.password.startsWith('$2b$')
-    ) {
-      await this.hashPassword();
-    }
-  }
-
+  @OneToMany(() => PostEntity, (post: PostEntity) => post.user)
+  posts: PostEntity[];
+  @OneToMany(() => CommentEntity, (Comment: CommentEntity) => Comment.post, {
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
+  })
+  comments: CommentEntity[];
   async validatePassword(password: string): Promise<boolean> {
-    if (!password) return false;
-
     const hash = await bcrypt.hash(password, this.salt);
     return hash === this.password;
   }

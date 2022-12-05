@@ -70,6 +70,8 @@ export class Report {
   @DeleteDateColumn()
   deleted_at: Date;
 
+  /*
   @ManyToOne(() => Programme)
   programmes: Programme[];
+  */
 }

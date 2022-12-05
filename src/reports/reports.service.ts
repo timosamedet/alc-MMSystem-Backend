@@ -1,6 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ProgrammesService } from 'src/programmes/programmes.service';
+import { Task } from 'src/tasks/entities/task.entity';
 import { TasksService } from 'src/tasks/tasks.service';
 import { User } from 'src/users/entities/user.entity';
 import { UsersService } from 'src/users/users.service';
@@ -51,14 +52,31 @@ export class ReportsService {
     });
   }
 
-  findReportByProgrammeId() {}
-  findReportByDateCreated() {}
-  findReportByUserId() {}
-  findReportByDateCreationRange() {}
-
-  updateReport(id: number, updateReportDto: UpdateReportDto) {
-    return this.reportRepository.update({ id }, { ...updateReportDto });
+  async findReportByProgrammeId(programmeId: number): Promise<Report[]> {
+    return await this.reportRepository.find({
+      where: { programme: { id: programmeId } },
+      order: { created_at: 'DESC' },
+    });
   }
+  findReportByDateCreated() {}
+  findReportByCreatorId() {}
+  findReportByDateCreationRange() {}
+  findByReportType() {}
+  findReportByTaskId() {}
+
+  async updateReport(id: number, updateReportDto: UpdateReportDto, user: User) {
+    const report = await this.findOneById(id);
+    if (!report) {
+      throw new NotFoundException(`Report with id: ${id} does not exit`);
+    }
+    user = await this.userService.findOne({ id: user.id });
+    updateReportDto['updated_by'] = user;
+    await this.reportRepository.update(id, { ...updateReportDto });
+  }
+
+  softDeleteReport() {}
+  restoreSoftDeletedReport() {}
+  hardDeleteReport() {}
 
   removeReport(id: number) {
     return this.reportRepository.delete(id);

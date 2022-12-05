@@ -10,5 +10,6 @@ import { ProgrammesModule } from '../programmes/programmes.module';
   imports: [TypeOrmModule.forFeature([Task]), UsersModule, ProgrammesModule],
   controllers: [TasksController],
   providers: [TasksService],
+  exports: [TasksService],
 })
 export class TasksModule {}
