@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { timeStamp } from 'console';
 import { ProgrammesService } from 'src/programmes/programmes.service';
 import { Task } from 'src/tasks/entities/task.entity';
 import { TasksService } from 'src/tasks/tasks.service';
@@ -8,7 +9,7 @@ import { UsersService } from 'src/users/users.service';
 import { Repository } from 'typeorm';
 import { CreateReportDto } from './dto/create-report.dto';
 import { UpdateReportDto } from './dto/update-report.dto';
-import { Report } from './entities/report.entity';
+import { Report, ReportType } from './entities/report.entity';
 
 @Injectable()
 export class ReportsService {
@@ -58,11 +59,26 @@ export class ReportsService {
       order: { created_at: 'DESC' },
     });
   }
+  async findReportByTaskId(taskId: number): Promise<Report[]> {
+    return await this.reportRepository.find({
+      where: { task: { id: taskId } },
+      order: { created_at: 'DESC' },
+    });
+  }
+
+  async findByReportType(reportType: ReportType): Promise<Report[]> {
+    return await this.reportRepository.find({
+      relations: {
+        task: true,
+        programme: true,
+      },
+      where: { type: reportType },
+      order: { created_at: 'DESC' },
+    });
+  }
   findReportByDateCreated() {}
   findReportByCreatorId() {}
   findReportByDateCreationRange() {}
-  findByReportType() {}
-  findReportByTaskId() {}
 
   async updateReport(id: number, updateReportDto: UpdateReportDto, user: User) {
     const report = await this.findOneById(id);
